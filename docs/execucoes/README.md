@@ -7,6 +7,7 @@ do arquivo de resultados da rodada, nunca do Langfuse.
 | # | Data | Execução | Modelo | Execuções | Acerto `graph_tools` | Custo real |
 |---|---|---|---|---|---|---|
 | [01](2026-10-10_01_claude-haiku-5.5.md) | 2026-10-10 | Claude Haiku 5.5, seis braços | claude-haiku-5.5 | 312 | 45/52 | US$ 1.04 |
+| [02](2026-10-12_02_qwen3.8-flash.md) | 2026-10-12 | Qwen3.8-flash, seis braços | qwen3.8-flash | 312 | 44/52 | US$ 0.48 |
 
 
 ## Sobre os links dos traces
