@@ -8,6 +8,7 @@ do arquivo de resultados da rodada, nunca do Langfuse.
 |---|---|---|---|---|---|---|
 | [01](2026-10-10_01_claude-haiku-5.5.md) | 2026-10-10 | Claude Haiku 5.5, seis braços | claude-haiku-5.5 | 312 | 45/52 | US$ 1.04 |
 | [02](2026-10-12_02_qwen3.8-flash.md) | 2026-10-12 | Qwen3.8-flash, seis braços | qwen3.8-flash | 312 | 44/52 | US$ 0.48 |
+| [03](2026-10-12_03_kimi-k3.md) | 2026-10-12 | Kimi K3 (Bedrock), seis braços | kimi-k3 | 312 | 47/52 | US$ 33.40 |
 
 
 ## Sobre os links dos traces
