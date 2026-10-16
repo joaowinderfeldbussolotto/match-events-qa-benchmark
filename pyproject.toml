@@ -1,6 +1,6 @@
 [project]
 name = "football-graphrag"
-version = "0.1.0"
+version = "1.0.0"
 description = "Benchmark: como permitir perguntas em linguagem natural sobre eventos de futebol (StatsBomb -> SPADL -> Neo4j/GDS -> PydanticAI)"
 readme = "README.md"
 requires-python = ">=3.11"
