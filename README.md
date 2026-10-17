@@ -1,4 +1,4 @@
-# football-tactics-knowledge-graph
+# match-events-qa-benchmark
 
 Um benchmark que responde uma pergunta:
 
@@ -8,10 +8,9 @@ Um benchmark que responde uma pergunta:
 > por ferramentas?
 
 Os dados são a final da Copa do Mundo de 2022, Argentina x França (StatsBomb
-Open Data). São 52 perguntas fechadas (as 25 do benchmark original mais 27 de grafo e de
-leitura tática), cada uma com resposta certa calculada por código, testada
-em todas as leituras razoáveis da pergunta, e corrigida por código; nenhum
-LLM dá nota. São seis braços (cinco principais e o `text_to_cypher`), rodados
+Open Data). São 52 perguntas fechadas, em cinco grupos, cada uma com resposta certa
+calculada por código, testada em todas as leituras razoáveis da pergunta, e
+corrigida por código; nenhum LLM dá nota. São seis braços (cinco principais e o `text_to_cypher`), rodados
 em quatro modelos: dois fechados e dois de pesos abertos, um barato e um caro
 de cada.
 
@@ -38,17 +37,18 @@ A documentação foi escrita para ser lida em ordem, sem conhecimento prévio:
 |---|---|
 | `no_context` | só a pergunta (mede a memória do modelo) |
 | `vector` | as 30 linhas de evento mais parecidas com a pergunta |
-| `events_in_prompt` | todos os 2.585 lances da partida (~111 mil tokens) |
+| `events_in_prompt` | todos os 2.585 lances da partida (de ~78 a ~115 mil tokens, conforme o modelo) |
 | `stats_in_prompt` | a súmula por jogador e por time |
-| `graph_tools` | 7 ferramentas primitivas que consultam o grafo no Neo4j |
+| `graph_tools` | 8 ferramentas primitivas que consultam o grafo no Neo4j |
+| `text_to_cypher` | o esquema do grafo e uma ferramenta que executa a consulta Cypher (só leitura) que o próprio modelo escrever |
 
-| Tipo de pergunta (5 de cada) | Exemplo |
-|---|---|
-| `fact` | "Quem cometeu a falta que deu origem ao primeiro pênalti da final?" |
-| `filtered_aggregation` | "Depois do gol que deixou o placar em 2 a 2 no tempo normal, quantas finalizações a Argentina fez até o fim da prorrogação?" |
-| `network` | "Qual dupla da França mais trocou passes entre si na final?" |
-| `network_slice` | "Na prorrogação, quem foi o principal elo da circulação de bola da França?" |
-| `unanswerable` | "Quantos minutos Messi passou no campo de ataque durante a final?" |
+| Grupo de perguntas | Perguntas | Exemplo |
+|---|---|---|
+| Busca e contagem | 11 | "Depois do gol que deixou o placar em 2 a 2 no tempo normal, quantas finalizações a Argentina fez até o fim da prorrogação?" |
+| Relações na rede de passes | 20 | "Qual dupla da França mais trocou passes entre si na final?" |
+| Jogadas e sequências | 10 | "Quais dois jogadores argentinos mais vezes participaram juntos das mesmas jogadas que chegaram ao terço final?" |
+| Antes e depois de um momento do jogo | 6 | "Depois que Di María foi substituído, qual companheiro mais passou a bola para Messi?" |
+| Controle: sem resposta | 5 | "Quantos minutos Messi passou no campo de ataque durante a final?" |
 
 As perguntas ficam em [`config/questions.yaml`](config/questions.yaml).
 
