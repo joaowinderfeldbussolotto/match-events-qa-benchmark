@@ -131,7 +131,7 @@ def pydantic_ai_model(settings: Settings):
             settings.llm_model,
             provider=OpenRouterProvider(
                 openai_client=openai_client,
-                app_title="football-tactics-knowledge-graph",
+                app_title="match-events-qa-benchmark",
             ),
         )
     if settings.llm_provider == "bedrock":
