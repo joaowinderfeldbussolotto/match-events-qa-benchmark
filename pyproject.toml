@@ -3,6 +3,7 @@ name = "football-graphrag"
 version = "0.1.0"
 description = "Benchmark: como permitir perguntas em linguagem natural sobre eventos de futebol (StatsBomb -> SPADL -> Neo4j/GDS -> PydanticAI)"
 readme = "README.md"
+license = { file = "LICENSE" }
 requires-python = ">=3.11"
 dependencies = [
     # kloppy pinado: socceraction 1.5.3 quebra com kloppy >=3.17 (ADR-4)

@@ -119,3 +119,14 @@ Com uma repetição por pergunta, são números de uma amostra, com intervalos
 de confiança largos (cerca de ±12 pontos). Cada execução, com configuração,
 custo, resultado e links para os traces, fica registrada em
 [`docs/execucoes/`](docs/execucoes/README.md).
+
+## Licença e dados
+
+O código, a documentação e os arquivos de resultados deste repositório estão
+sob a [licença MIT](LICENSE).
+
+Os eventos da partida vêm do [StatsBomb Open Data](https://github.com/statsbomb/open-data),
+que tem termos próprios (inclusive a exigência de citar a StatsBomb ao
+publicar algo feito com os dados). Os dados brutos **não** ficam neste
+repositório: `scripts/download_statsbomb.py` os baixa para `data/raw/`. Quem
+reutilizar o código ou os resultados deve ler e respeitar esses termos.
