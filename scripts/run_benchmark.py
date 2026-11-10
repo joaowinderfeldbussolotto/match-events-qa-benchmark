@@ -9,7 +9,7 @@ Usage:
     python scripts/run_benchmark.py --sample              # 1 question per type, 1 repeat
     python scripts/run_benchmark.py --resume              # skip what is already in the file
     python scripts/run_benchmark.py --questions p05,t06 --arms graph_tools --repeats 1 \
-        --output data/benchmark/x_results.jsonl --overwrite --rescore --page docs/execucoes/<page>.md
+        --output data/benchmark/x_results.jsonl --overwrite --rescore --page docs/runs/<page>.md
                                                           # run those again, replacing their lines,
                                                           # score the whole file again, rewrite the page
 
@@ -19,7 +19,7 @@ retries) is reported and NOT written, so ``--resume`` retries it. A model
 answer that never validates is written, as a format error.
 
 At the end, writes summary.md (same as ``scripts/summarize.py``) and the page of the
-run in docs/execucoes/ (same as ``scripts/report_run.py``), with the real cost when the
+run in docs/runs/ (same as ``scripts/report_run.py``), with the real cost when the
 provider is OpenRouter. ``--no-report`` skips the page.
 """
 
@@ -138,8 +138,8 @@ if __name__ == "__main__":
     parser.add_argument("--resume", action="store_true", help="skip runs already in the output file")
     parser.add_argument("--fresh", action="store_true", help="empty the output file first")
     parser.add_argument("--output", type=Path, default=None, help="default: data/benchmark/results.jsonl")
-    parser.add_argument("--title", help="title of the run page in docs/execucoes/ (default: questions and arms)")
-    parser.add_argument("--no-report", action="store_true", help="do not write the run page in docs/execucoes/")
+    parser.add_argument("--title", help="title of the run page in docs/runs/ (default: questions and arms)")
+    parser.add_argument("--no-report", action="store_true", help="do not write the run page in docs/runs/")
     parser.add_argument("--overwrite", action="store_true",
                         help="run the selected questions x arms x repeats again, replacing their lines in the file")
     parser.add_argument("--rescore", action="store_true",

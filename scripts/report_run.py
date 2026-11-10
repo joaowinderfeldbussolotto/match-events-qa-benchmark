@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Write the page of a run in docs/execucoes/ from an existing results file, without calling any LLM.
+"""Write the page of a run in docs/runs/ from an existing results file, without calling any LLM.
 
 ``scripts/run_benchmark.py`` already does this at the end of every run; use this script
 to write the page again, or for a results file from before the automatic pages.

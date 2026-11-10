@@ -1,11 +1,11 @@
-"""The page of one benchmark run, written to ``docs/execucoes/`` at the end of every run.
+"""The page of one benchmark run, written to ``docs/runs/`` at the end of every run.
 
 Pure function of ``results.jsonl`` plus a few facts about the run (command, commit,
 cost): no LLM, no Neo4j. ``scripts/run_benchmark.py`` calls ``write_report`` when it
 finishes; ``scripts/report_run.py`` writes the page again from an existing results file.
 The page follows the hand-written ones: configuration, results by group and arm, kinds
 of error, cost, an automatic reading of the numbers, every miss with its expected
-answer, and the traces. It also adds the run to the index (``docs/execucoes/README.md``).
+answer, and the traces. It also adds the run to the index (``docs/runs/README.md``).
 """
 
 import json
@@ -21,10 +21,10 @@ from statistics import mean
 from football_graphrag.benchmark.arms import ARMS
 from football_graphrag.benchmark.questions import BY_ID, GROUP_OF, GROUPS, ORDER
 
-RUNS_DIR = Path(__file__).resolve().parents[3] / "docs" / "execucoes"
-CONTROL = "Controle: sem resposta"
+RUNS_DIR = Path(__file__).resolve().parents[3] / "docs" / "runs"
+CONTROL = "Control: no answer"
 ICONS = {"ok": "✅", "wrong": "❌", "abstention": "🟡", "format_error": "⚠️"}
-VERDICT = {"wrong": "alucinação", "abstention": "abstenção", "format_error": "erro de formato"}
+VERDICT = {"wrong": "hallucination", "abstention": "abstention", "format_error": "format error"}
 
 
 @dataclass
@@ -53,10 +53,10 @@ def git_revision() -> str:
         return subprocess.run(["git", *args], capture_output=True, text=True, cwd=RUNS_DIR).stdout.strip()
     commit, branch = git("rev-parse", "--short", "HEAD"), git("branch", "--show-current")
     if not commit:
-        return "desconhecido"
+        return "unknown"
     # The run itself writes results and pages: only code changes make the revision dirty.
-    dirty = " (com mudanças não commitadas)" if git("status", "--porcelain", "--untracked-files=no", "--", ":/",
-                                                    ":!/data", ":!/docs/execucoes") else ""
+    dirty = " (with uncommitted changes)" if git("status", "--porcelain", "--untracked-files=no", "--", ":/",
+                                                    ":!/data", ":!/docs/runs") else ""
     return f"branch `{branch}`, commit `{commit}`{dirty}"
 
 
@@ -77,9 +77,9 @@ def _count(rows: list[dict]) -> str:
 
 def _expected(e: dict) -> str:
     if e.get("no_data"):
-        return "sem dados"
+        return "no data"
     options = e.get("accepted") or ([e["players"]] if e.get("players") else [])
-    parts = [" ou ".join(", ".join(o) for o in options)] if options else []
+    parts = [" or ".join(", ".join(o) for o in options)] if options else []
     if e.get("value") is not None:
         parts.append(f"{e['value']:g}")
     return " · ".join(parts) or "–"
@@ -87,9 +87,9 @@ def _expected(e: dict) -> str:
 
 def _answer(a: dict | None) -> str:
     if a is None:
-        return "sem resposta válida"
+        return "no valid answer"
     if a.get("no_data"):
-        return "sem dados"
+        return "no data"
     parts = [", ".join(a["players"])] if a.get("players") else []
     if a.get("value") is not None:
         parts.append(f"{a['value']:g}")
@@ -108,11 +108,11 @@ def reading(rows: list[dict], arms: list[str]) -> list[str]:
     out = []
     if acc:
         ranked = sorted(acc, key=acc.get, reverse=True)
-        out.append("**Ordem dos braços** (sem as perguntas sem resposta): "
+        out.append("**Arm order** (without the questions that have no answer): "
                    + " > ".join(f"`{a}` {100 * acc[a]:.0f}%" for a in ranked) + ".")
         if len(ranked) > 1:
             gap = 100 * (acc[ranked[0]] - acc[ranked[1]])
-            out.append(f"**Distância do primeiro para o segundo:** {gap:.0f} pontos percentuais.")
+            out.append(f"**Gap between the first and the second:** {gap:.0f} percentage points.")
     for g, types in GROUPS.items():
         if g == CONTROL:
             continue
@@ -122,7 +122,7 @@ def reading(rows: list[dict], arms: list[str]) -> list[str]:
             continue
         best = max(scores.values())
         leaders = [a for a, v in scores.items() if v == best]
-        out.append(f"**{g}:** melhor {', '.join(f'`{a}`' for a in leaders)} ({100 * best:.0f}%); "
+        out.append(f"**{g}:** best {', '.join(f'`{a}`' for a in leaders)} ({100 * best:.0f}%); "
                    + ", ".join(f"`{a}` {100 * v:.0f}%" for a, v in scores.items() if a not in leaders) + ".")
     per_q = defaultdict(dict)
     for r in rows:
@@ -130,12 +130,12 @@ def reading(rows: list[dict], arms: list[str]) -> list[str]:
     q_order = sorted(per_q, key=lambda q: (ORDER.index(q[0]), q))
     nobody = [q for q in q_order if not any(any(v) for v in per_q[q].values())]
     if nobody:
-        out.append(f"**Nenhum braço acertou** ({len(nobody)}): {', '.join(nobody)}.")
+        out.append(f"**No arm got it right** ({len(nobody)}): {', '.join(nobody)}.")
     for a in arms:
         only = [q for q in q_order if any(per_q[q].get(a, []))
                 and not any(any(v) for b, v in per_q[q].items() if b != a)]
         if only and len(arms) > 1:
-            out.append(f"**Só `{a}` acertou** ({len(only)}): {', '.join(only)}.")
+            out.append(f"**Only `{a}` got it right** ({len(only)}): {', '.join(only)}.")
     for a in arms:
         rs = by_arm[a]
         kinds = defaultdict(int)
@@ -144,7 +144,7 @@ def reading(rows: list[dict], arms: list[str]) -> list[str]:
                 kinds[verdict(r)] += 1
         if kinds:
             main = max(kinds, key=kinds.get)
-            out.append(f"**`{a}` erra mais por {VERDICT[main]}:** "
+            out.append(f"**`{a}` misses mostly by {VERDICT[main]}:** "
                        + ", ".join(f"{n} {VERDICT[k]}" for k, n in sorted(kinds.items(), key=lambda kv: -kv[1])) + ".")
     return ["- " + line for line in out]
 
@@ -156,29 +156,28 @@ def render(rows: list[dict], number: int, title: str, info: RunInfo, results_pat
     qids = sorted({r["question_id"] for r in rows}, key=lambda q: (ORDER.index(q[0]), q))
     repeats = sorted({int(r["repeat"]) for r in rows})
     models = sorted({r["model"] for r in rows})
-    cost = f"US$ {info.cost_usd:.2f} (consumo da chave no OpenRouter antes e depois)" if info.cost_usd is not None \
-        else "não medido"
+    cost = f"US$ {info.cost_usd:.2f} (OpenRouter key usage before and after)" if info.cost_usd is not None \
+        else "not measured"
     out = [
-        f"# Execução {number:02d}: {title}",
+        f"# Run {number:02d}: {title}",
         "",
-        "Página gerada automaticamente por `scripts/run_benchmark.py` (ou `scripts/report_run.py`) a partir "
-        "do arquivo de resultados. Os números são contagens de execuções, corrigidas por código contra o "
-        "`ground_truth.json`.",
+        "Page written automatically by `scripts/run_benchmark.py` (or `scripts/report_run.py`) from the "
+        "results file. The numbers are counts of runs, scored by code against `ground_truth.json`.",
         "",
         _table(["", ""], [
-            ["Data", info.day.isoformat()],
-            ["Tipo", f"{len(qids)} perguntas × {len(arms)} braços ({', '.join(f'`{a}`' for a in arms)}) × "
-                     f"{len(repeats)} repetição(ões) = {len(rows)} execuções"],
-            ["Modelo", ", ".join(f"`{m}`" for m in models)],
-            ["Código", revision],
-            ["Comando", f"`{info.command}`" if info.command else "–"],
-            ["Custo real", cost],
-            ["Arquivos", f"[`{Path(results_path).name}`]({results_path}), [`{Path(summary_path).name}`]({summary_path})"],
+            ["Date", info.day.isoformat()],
+            ["Scope", f"{len(qids)} questions × {len(arms)} arms ({', '.join(f'`{a}`' for a in arms)}) × "
+                      f"{len(repeats)} repeat(s) = {len(rows)} runs"],
+            ["Model", ", ".join(f"`{m}`" for m in models)],
+            ["Code", revision],
+            ["Command", f"`{info.command}`" if info.command else "–"],
+            ["Real cost", cost],
+            ["Files", f"[`{Path(results_path).name}`]({results_path}), [`{Path(summary_path).name}`]({summary_path})"],
         ]),
     ]
     if info.failed:
-        out += ["", f"> **{info.failed} execuções falharam por erro do provedor** e não estão no arquivo; "
-                    "rode de novo com `--resume`."]
+        out += ["", f"> **{info.failed} runs failed with a provider error** and are not in the file; "
+                    "run again with `--resume`."]
 
     body = []
     for g, types in GROUPS.items():
@@ -186,11 +185,11 @@ def render(rows: list[dict], number: int, title: str, info: RunInfo, results_pat
         if n:
             body.append([g, str(n)] + [_count([r for r in by_arm[a] if r["type"] in types]) for a in arms])
     body.append(["**total**", str(len(qids))] + [f"**{_count(by_arm[a])}**" for a in arms])
-    body.append(["**total sem o controle**", str(len({r['question_id'] for r in rows if r['type'] != 'unanswerable'}))]
+    body.append(["**total without the control**", str(len({r['question_id'] for r in rows if r['type'] != 'unanswerable'}))]
                 + [f"**{_count([r for r in by_arm[a] if r['type'] != 'unanswerable'])}**" for a in arms])
-    out += ["", "## Resultado por grupo", "",
-            "O controle (perguntas sem resposta nos dados) é acertado por quem responde \"sem dados\" para "
-            "tudo; a última linha o deixa de fora.", "", _table(["grupo", "perguntas"] + arms, body)]
+    out += ["", "## Results by group", "",
+            "The control group (questions the data cannot answer) is won by an arm that answers \"no data\" "
+            "to everything; the last row leaves it out.", "", _table(["group", "questions"] + arms, body)]
 
     body = []
     for a in arms:
@@ -200,27 +199,27 @@ def render(rows: list[dict], number: int, title: str, info: RunInfo, results_pat
                     + [f"{mean(r['input_tokens'] for r in rs):,.0f}".replace(",", "."),
                        f"{mean(r['output_tokens'] for r in rs):,.0f}".replace(",", "."),
                        f"{mean(r['n_tool_calls'] for r in rs):.1f}", f"{mean(r['latency_s'] for r in rs):.1f} s"])
-    out += ["", "## Erros e custo por braço", "",
-            "Alucinação: resposta errada dada como resposta. Abstenção: \"sem dados\" numa pergunta que tem "
-            "resposta. Erro de formato: nenhuma resposta válida depois das tentativas (ou limite de chamadas).",
-            "", _table(["braço", "alucinação", "abstenção", "erro de formato", "tokens de entrada", "tokens de saída",
-                        "chamadas de tool", "latência"], body)]
+    out += ["", "## Errors and cost by arm", "",
+            "Hallucination: a wrong answer given as an answer. Abstention: \"no data\" on a question that has "
+            "an answer. Format error: no valid answer after the retries (or the call limit was reached).",
+            "", _table(["arm", "hallucination", "abstention", "format error", "input tokens", "output tokens",
+                        "tool calls", "latency"], body)]
 
-    out += ["", "## Leitura automática", "", *reading(rows, arms)]
+    out += ["", "## Automatic reading", "", *reading(rows, arms)]
 
-    out += ["", "## Erros de cada braço", ""]
+    out += ["", "## Misses of each arm", ""]
     for a in arms:
         misses = sorted((r for r in by_arm[a] if not r["correct"]),
                         key=lambda r: (ORDER.index(r["question_id"][0]), r["question_id"], int(r["repeat"])))
         if not misses:
-            out += [f"**`{a}`:** nenhum erro.", ""]
+            out += [f"**`{a}`:** no misses.", ""]
             continue
         lines = [[f"[{r['question_id']}]({r['trace_url']})" if r.get("trace_url") else r["question_id"],
                   _cell(BY_ID[r["question_id"]].text if r["question_id"] in BY_ID else ""),
                   _cell(_expected(r["expected"])), _cell(_answer(r["answer"])), VERDICT[verdict(r)]]
                  for r in misses]
-        out += [f"<details><summary><b><code>{a}</code></b>: {len(misses)} erros</summary>", "",
-                _table(["pergunta", "texto", "esperado", "resposta", "tipo"], lines), "", "</details>", ""]
+        out += [f"<details><summary><b><code>{a}</code></b>: {len(misses)} misses</summary>", "",
+                _table(["question", "text", "expected", "answer", "kind"], lines), "", "</details>", ""]
 
     body = []
     for q in qids:
@@ -230,9 +229,9 @@ def render(rows: list[dict], number: int, title: str, info: RunInfo, results_pat
             cells.append(" ".join(f"[{ICONS[verdict(r)]}]({r['trace_url']})" if r.get("trace_url")
                                   else ICONS[verdict(r)] for r in rs) or "–")
         body.append([q, GROUP_OF.get(BY_ID[q].type, "") if q in BY_ID else ""] + cells)
-    out += ["## Traces", "", _table(["pergunta", "grupo"] + [f"`{a}`" for a in arms], body), "",
-            "✅ certo · ❌ alucinação · 🟡 abstenção · ⚠️ erro de formato. Cada símbolo abre o trace no Langfuse "
-            "(é preciso estar logado no projeto).", ""]
+    out += ["## Traces", "", _table(["question", "group"] + [f"`{a}`" for a in arms], body), "",
+            "✅ right · ❌ hallucination · 🟡 abstention · ⚠️ format error. Each symbol opens the trace in "
+            "Langfuse; the Langfuse project is private, so the links only open for its members.", ""]
     return "\n".join(out)
 
 
@@ -269,9 +268,9 @@ def add_to_index(row: str, runs_dir: Path = RUNS_DIR) -> None:
 def _previous(page: Path) -> tuple[str, str, float | None]:
     """Title, command and cost recorded on an existing run page."""
     text = page.read_text()
-    title = re.search(r"^# Execução \d+: (.*)$", text, re.M)
-    command = re.search(r"^\| Comando \| (.*) \|$", text, re.M)
-    cost = re.search(r"^\| Custo real \| US\$ ([\d.]+)", text, re.M)
+    title = re.search(r"^# Run \d+: (.*)$", text, re.M)
+    command = re.search(r"^\| Command \| (.*) \|$", text, re.M)
+    cost = re.search(r"^\| Real cost \| US\$ ([\d.]+)", text, re.M)
     return (title.group(1) if title else "", command.group(1).strip("`") if command else "",
             float(cost.group(1)) if cost else None)
 
@@ -297,12 +296,12 @@ def write_report(results_path: Path, summary_path: Path, info: RunInfo, title: s
         number, day = int(page.name.split("_")[1]), date.fromisoformat(page.name.split("_")[0])
         old_title, old_command, old_cost = _previous(page)
         cost = old_cost + info.cost_usd if old_cost is not None and info.cost_usd is not None else None
-        command = f"{old_command}`, depois `{info.command}" if old_command else info.command
+        command = f"{old_command}`, then `{info.command}" if old_command else info.command
         info = RunInfo(command=command, cost_usd=cost, day=day, failed=info.failed)
         title = title or old_title
     else:
         number = next_number(runs_dir)
-    title = title or f"{len({r['question_id'] for r in rows})} perguntas, {len(arms)} braços"
+    title = title or f"{len({r['question_id'] for r in rows})} questions, {len(arms)} arms"
     new_page = page is None
     page = page or runs_dir / f"{info.day.isoformat()}_{number:02d}_{_slug(results_path.stem.removesuffix('_results'))}.md"
 

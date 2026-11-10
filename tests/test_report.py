@@ -25,21 +25,21 @@ ROWS = [
 
 
 def test_render_has_groups_errors_reading_and_traces():
-    md = render(ROWS, 12, "teste", RunInfo(command="python x", cost_usd=0.5, day=date(2026, 1, 2)),
+    md = render(ROWS, 12, "test", RunInfo(command="python x", cost_usd=0.5, day=date(2026, 1, 2)),
                 "../../r.jsonl", "../../s.md", "commit `abc`")
-    assert md.startswith("# Execução 12: teste")
-    assert "| Custo real | US$ 0.50" in md
-    assert "| Busca e contagem | 1 | 1/1 (100%) | 1/1 (100%) |" in md
-    assert "| **total sem o controle** | 3 | **1/3 (33%)** | **2/3 (67%)** |" in md
-    assert "**Nenhum braço acertou** (1): p03." in md
-    assert "**Só `graph_tools` acertou** (1): n04." in md
+    assert md.startswith("# Run 12: test")
+    assert "| Real cost | US$ 0.50" in md
+    assert "| Search and counting | 1 | 1/1 (100%) | 1/1 (100%) |" in md
+    assert "| **total without the control** | 3 | **1/3 (33%)** | **2/3 (67%)** |" in md
+    assert "**No arm got it right** (1): p03." in md
+    assert "**Only `graph_tools` got it right** (1): n04." in md
     assert "[🟡](https://t/p03/graph_tools)" in md
-    assert "| [n04](https://t/n04/events_in_prompt) |" in md and "| Enzo Fernandez | Messi | alucinação |" in md
+    assert "| [n04](https://t/n04/events_in_prompt) |" in md and "| Enzo Fernandez | Messi | hallucination |" in md
 
 
 def test_numbering_and_index(tmp_path):
     (tmp_path / "2026-01-01_07_x.md").write_text("")
-    (tmp_path / "README.md").write_text("| # |\n|---|\n| [07](2026-01-01_07_x.md) | a |\n\nfim\n")
+    (tmp_path / "README.md").write_text("| # |\n|---|\n| [07](2026-01-01_07_x.md) | a |\n\nend\n")
     assert next_number(tmp_path) == 8
     add_to_index(index_row(8, "p.md", RunInfo(day=date(2026, 1, 2)), "t", ROWS), tmp_path)
     lines = (tmp_path / "README.md").read_text().splitlines()
@@ -55,12 +55,12 @@ def test_rewriting_a_page_keeps_number_and_adds_cost(tmp_path):
     results.write_text("".join(json.dumps(r) + "\n" for r in ROWS))
     (tmp_path / "README.md").write_text("| # |\n|---|\n| [03](2026-01-01_03_x.md) | old |\n")
     page = tmp_path / "2026-01-01_03_x.md"
-    page.write_text("# Execução 03: título\n\n| Comando | `python a` |\n| Custo real | US$ 0.80 (x) |\n")
+    page.write_text("# Run 03: title\n\n| Command | `python a` |\n| Real cost | US$ 0.80 (x) |\n")
     write_report(results, tmp_path / "s.md", RunInfo(command="python b", cost_usd=0.1), runs_dir=tmp_path, page=page)
     text = page.read_text()
-    assert text.startswith("# Execução 03: título") and "| Data | 2026-01-01 |" in text
-    assert "US$ 0.90" in text and "`python a`, depois `python b`" in text
-    assert "| [03](2026-01-01_03_x.md) | 2026-01-01 | título |" in (tmp_path / "README.md").read_text()
+    assert text.startswith("# Run 03: title") and "| Date | 2026-01-01 |" in text
+    assert "US$ 0.90" in text and "`python a`, then `python b`" in text
+    assert "| [03](2026-01-01_03_x.md) | 2026-01-01 | title |" in (tmp_path / "README.md").read_text()
 
 
 def test_rescore_uses_the_current_ground_truth():
