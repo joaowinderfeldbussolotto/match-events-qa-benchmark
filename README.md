@@ -29,7 +29,7 @@ A documentação foi escrita para ser lida em ordem, sem conhecimento prévio:
 | [7. Decisões e limitações](docs/07-decisoes-e-limitacoes.md) | por que cada escolha, os quatro modelos e suas condições, problemas achados nos dados, o que o benchmark não diz |
 | [8. Glossário](docs/08-glossario.md) | todos os termos técnicos em linguagem simples |
 | [9. Transformações dos dados](docs/09-transformacoes-dos-dados.md) | tudo o que acontece com os dados, do JSON bruto ao que cada braço vê, e como o gabarito é calculado |
-| [Registro das execuções](docs/execucoes/README.md) | cada execução do benchmark: configuração, custo real, resultado, achados e links para os traces |
+| [Registro das execuções](docs/runs/README.md) | cada execução do benchmark: configuração, custo real, resultado, achados e links para os traces |
 
 ## Em uma tabela
 
@@ -110,15 +110,15 @@ o raciocínio vêm juntos; o Sonnet 4.6 usa esforço de raciocínio diferente no
 
 | Modelo | Arquivo de resultados | Página da execução |
 |---|---|---|
-| Claude Haiku 5.5 | [`claude-haiku-5.5_results.jsonl`](data/benchmark/claude-haiku-5.5_results.jsonl) | [`2026-10-10_01_claude-haiku-5.5.md`](docs/execucoes/2026-10-10_01_claude-haiku-5.5.md) |
-| Qwen3.8-flash | [`qwen3.8-flash_results.jsonl`](data/benchmark/qwen3.8-flash_results.jsonl) | [`2026-10-12_02_qwen3.8-flash.md`](docs/execucoes/2026-10-12_02_qwen3.8-flash.md) |
-| Claude Sonnet 4.6 | [`claude-sonnet-4.6_results.jsonl`](data/benchmark/claude-sonnet-4.6_results.jsonl) | [`2026-10-13_04_claude-sonnet-4.6.md`](docs/execucoes/2026-10-13_04_claude-sonnet-4.6.md) |
-| Kimi K3 | [`kimi-k3_results.jsonl`](data/benchmark/kimi-k3_results.jsonl) | [`2026-10-12_03_kimi-k3.md`](docs/execucoes/2026-10-12_03_kimi-k3.md) |
+| Claude Haiku 5.5 | [`claude-haiku-5.5_results.jsonl`](data/benchmark/claude-haiku-5.5_results.jsonl) | [`2026-10-10_01_claude-haiku-5.5.md`](docs/runs/2026-10-10_01_claude-haiku-5.5.md) |
+| Qwen3.8-flash | [`qwen3.8-flash_results.jsonl`](data/benchmark/qwen3.8-flash_results.jsonl) | [`2026-10-12_02_qwen3.8-flash.md`](docs/runs/2026-10-12_02_qwen3.8-flash.md) |
+| Claude Sonnet 4.6 | [`claude-sonnet-4.6_results.jsonl`](data/benchmark/claude-sonnet-4.6_results.jsonl) | [`2026-10-13_04_claude-sonnet-4.6.md`](docs/runs/2026-10-13_04_claude-sonnet-4.6.md) |
+| Kimi K3 | [`kimi-k3_results.jsonl`](data/benchmark/kimi-k3_results.jsonl) | [`2026-10-12_03_kimi-k3.md`](docs/runs/2026-10-12_03_kimi-k3.md) |
 
 Com uma repetição por pergunta, são números de uma amostra, com intervalos
 de confiança largos (cerca de ±12 pontos). Cada execução, com configuração,
 custo, resultado e links para os traces, fica registrada em
-[`docs/execucoes/`](docs/execucoes/README.md).
+[`docs/runs/`](docs/runs/README.md).
 
 ## Licença e dados
 

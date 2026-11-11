@@ -30,11 +30,11 @@ PREFIXES = {
 ORDER = "".join(PREFIXES.values())
 # Groups for the reports: what the question requires, from a table lookup to relations over time.
 GROUPS = {
-    "Busca e contagem": ("fact", "filtered_aggregation"),
-    "Relações na rede de passes": ("network", "network_slice", "structure", "counterfactual"),
-    "Jogadas e sequências": ("sequence", "play"),
-    "Antes e depois de um momento do jogo": ("substitution",),
-    "Controle: sem resposta": ("unanswerable",),
+    "Search and counting": ("fact", "filtered_aggregation"),
+    "Pass network relations": ("network", "network_slice", "structure", "counterfactual"),
+    "Plays and sequences": ("sequence", "play"),
+    "Before and after a game moment": ("substitution",),
+    "Control: no answer": ("unanswerable",),
 }
 GROUP_OF = {t: g for g, types in GROUPS.items() for t in types}
 QUESTION_TYPES = tuple(PREFIXES)
