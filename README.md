@@ -20,15 +20,15 @@ A documentação foi escrita para ser lida em ordem, sem conhecimento prévio:
 
 | Capítulo | O que você aprende |
 |---|---|
-| [1. Visão geral](docs/01-visao-geral.md) | a pergunta do benchmark, os 6 braços, os 5 grupos de pergunta e os 4 modelos, com analogias |
-| [2. Dos dados ao grafo](docs/02-dos-dados-ao-grafo.md) | o caminho do JSON bruto ao banco em grafo, acompanhando o gol de Di María |
-| [3. Perguntas e gabarito](docs/03-perguntas-e-gabarito.md) | o arquivo de perguntas, como a resposta certa é calculada e conferida |
-| [4. Os seis braços](docs/04-os-seis-bracos.md) | exatamente o que cada braço envia ao modelo, com trechos reais |
-| [5. Conferência e métricas](docs/05-conferencia-e-metricas.md) | como cada resposta é corrigida e como ler o relatório |
-| [6. Como rodar](docs/06-como-rodar.md) | passo a passo do zero, local ou Docker, e solução de problemas |
-| [7. Decisões e limitações](docs/07-decisoes-e-limitacoes.md) | por que cada escolha, os quatro modelos e suas condições, problemas achados nos dados, o que o benchmark não diz |
-| [8. Glossário](docs/08-glossario.md) | todos os termos técnicos em linguagem simples |
-| [9. Transformações dos dados](docs/09-transformacoes-dos-dados.md) | tudo o que acontece com os dados, do JSON bruto ao que cada braço vê, e como o gabarito é calculado |
+| [1. Visão geral](docs/pt-br/01-visao-geral.md) | a pergunta do benchmark, os 6 braços, os 5 grupos de pergunta e os 4 modelos, com analogias |
+| [2. Dos dados ao grafo](docs/pt-br/02-dos-dados-ao-grafo.md) | o caminho do JSON bruto ao banco em grafo, acompanhando o gol de Di María |
+| [3. Perguntas e gabarito](docs/pt-br/03-perguntas-e-gabarito.md) | o arquivo de perguntas, como a resposta certa é calculada e conferida |
+| [4. Os seis braços](docs/pt-br/04-os-seis-bracos.md) | exatamente o que cada braço envia ao modelo, com trechos reais |
+| [5. Conferência e métricas](docs/pt-br/05-conferencia-e-metricas.md) | como cada resposta é corrigida e como ler o relatório |
+| [6. Como rodar](docs/pt-br/06-como-rodar.md) | passo a passo do zero, local ou Docker, e solução de problemas |
+| [7. Decisões e limitações](docs/pt-br/07-decisoes-e-limitacoes.md) | por que cada escolha, os quatro modelos e suas condições, problemas achados nos dados, o que o benchmark não diz |
+| [8. Glossário](docs/pt-br/08-glossario.md) | todos os termos técnicos em linguagem simples |
+| [9. Transformações dos dados](docs/pt-br/09-transformacoes-dos-dados.md) | tudo o que acontece com os dados, do JSON bruto ao que cada braço vê, e como o gabarito é calculado |
 | [Registro das execuções](docs/runs/README.md) | cada execução do benchmark: configuração, custo real, resultado, achados e links para os traces |
 
 ## Em uma tabela
@@ -55,7 +55,7 @@ As perguntas ficam em [`config/questions.yaml`](config/questions.yaml).
 ## Rodar em 5 comandos
 
 Com Docker e Python 3.11 (detalhes e caminho só com Docker no
-[capítulo 6](docs/06-como-rodar.md)):
+[capítulo 6](docs/pt-br/06-como-rodar.md)):
 
 ```bash
 cp .env.example .env                       # preencha as chaves de LLM e de embeddings
@@ -106,7 +106,7 @@ lugar, e o que lê a tabela inteira (`events_in_prompt`) chega perto, a um
 custo bem maior de tempo e de tokens. Nos dois caros, o tamanho do modelo e
 o raciocínio vêm juntos; o Sonnet 4.6 usa esforço de raciocínio diferente no
 `events_in_prompt`. Condições de cada rodada e limites dessa leitura:
-[capítulo 7](docs/07-decisoes-e-limitacoes.md).
+[capítulo 7](docs/pt-br/07-decisoes-e-limitacoes.md).
 
 | Modelo | Arquivo de resultados | Página da execução |
 |---|---|---|
