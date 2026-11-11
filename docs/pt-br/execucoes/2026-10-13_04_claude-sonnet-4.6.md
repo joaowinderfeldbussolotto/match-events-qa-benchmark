@@ -9,7 +9,7 @@ Página gerada automaticamente por `scripts/run_benchmark.py` (ou `scripts/repor
 | Modelo | `bedrock:us.anthropic.claude-sonnet-4-6` |
 | Comando | `LLM_PROVIDER=bedrock LLM_MODEL=us.anthropic.claude-sonnet-4-6 LLM_AWS_REGION=us-east-2 LLM_REASONING_EFFORT=medium python scripts/run_benchmark.py --arms no_context,vector,events_in_prompt,stats_in_prompt,graph_tools,text_to_cypher --repeats 1` |
 | Custo | ~US$ 28 calculado pelos tokens e preços de lista do Bedrock (chamada direta), somando a rodada e as novas execuções do `events_in_prompt` descritas abaixo |
-| Arquivos | [`claude-sonnet-4.6_results.jsonl`](../../data/benchmark/claude-sonnet-4.6_results.jsonl), [`claude-sonnet-4.6_summary.md`](../../data/benchmark/claude-sonnet-4.6_summary.md) |
+| Arquivos | [`claude-sonnet-4.6_results.jsonl`](../../../data/benchmark/claude-sonnet-4.6_results.jsonl), [`claude-sonnet-4.6_summary.md`](../../../data/benchmark/claude-sonnet-4.6_summary.md) |
 
 ## Resultado por grupo
 
