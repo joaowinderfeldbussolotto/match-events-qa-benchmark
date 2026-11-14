@@ -222,8 +222,8 @@ a tudo acerta todas as `unanswerable`, e essa linha tira esse efeito.
 
 Como ler: compare **colunas** para saber qual braço vai melhor em cada tipo.
 Compare **linhas** para saber que tipo de pergunta é difícil para todos.
-Cada tipo tem 5 perguntas, então **uma pergunta vale 20 pontos percentuais**
-dentro do tipo, com qualquer número de repetições. Diferenças de uma ou duas
+Cada tipo tem de 1 a 10 perguntas, então **uma pergunta vale de 10 a 100
+pontos percentuais** dentro do tipo, com qualquer número de repetições. Diferenças de uma ou duas
 perguntas entre braços não devem ser lidas como superioridade.
 
 ### 2. Erros por braço

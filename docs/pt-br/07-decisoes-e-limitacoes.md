@@ -113,7 +113,7 @@ confiável.
 
 Os arquivos e as páginas de cada execução estão em
 `data/benchmark/` (um `<modelo>_results.jsonl` e um `<modelo>_summary.md` por
-modelo) e em `docs/execucoes/`.
+modelo) e em `docs/runs/` (em inglês; em português, `docs/pt-br/execucoes/`).
 
 ### Perguntas sem definição, testadas em todas as leituras
 

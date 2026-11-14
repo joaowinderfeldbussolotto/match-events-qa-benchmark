@@ -10,7 +10,7 @@ pergunta e como se confere o cálculo.
 ## 3.1 Onde ficam as perguntas: `config/questions.yaml`
 
 As perguntas ficam num arquivo de configuração, separado do código:
-[`config/questions.yaml`](../config/questions.yaml). Uma entrada tem esta
+[`config/questions.yaml`](../../config/questions.yaml). Uma entrada tem esta
 cara:
 
 ```yaml
@@ -300,7 +300,7 @@ circulação de bola":
 
 Das 40 perguntas escritas, 9 saíram por esse teste. Todas as leituras de
 todas as perguntas estão em
-[`data/benchmark/robustness.md`](../data/benchmark/robustness.md), gerado por
+[`data/benchmark/robustness.md`](../../data/benchmark/robustness.md), gerado por
 `scripts/robustness_report.py`.
 
 ---

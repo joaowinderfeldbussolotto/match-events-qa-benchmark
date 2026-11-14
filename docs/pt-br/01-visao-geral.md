@@ -121,7 +121,7 @@ opinião: está certo ou errado. Detalhes no
 
 Depois de rodar as 52 perguntas nos 6 braços (com 1 ou mais repetições), o
 projeto gera um resumo (`summary.md`) e uma página da execução em
-`docs/execucoes/` com:
+`docs/runs/` (em inglês; em português, `docs/pt-br/execucoes/`), com:
 
 1. **acerto por tipo de pergunta e por braço**, a tabela principal, com o
    total com e sem as perguntas sem resposta;

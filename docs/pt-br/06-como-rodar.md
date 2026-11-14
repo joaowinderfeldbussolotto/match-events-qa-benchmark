@@ -213,7 +213,7 @@ O desfecho pode ser `ok`, `wrong`, `abstention` ou `format_error`
 
 ### Quais braços rodar
 
-O arquivo [`config/benchmark.yaml`](../config/benchmark.yaml) diz quais braços
+O arquivo [`config/benchmark.yaml`](../../config/benchmark.yaml) diz quais braços
 o `run_benchmark.py` e o `ask.py` usam quando a linha de comando não diz
 outra coisa:
 
@@ -250,7 +250,7 @@ da segunda), o `graph_tools` (~76 mil por pergunta) e o `text_to_cypher`
 | Claude Sonnet 4.6 | Bedrock direto, raciocínio ligado | ~US$ 18 a 26 |
 | Kimi K3 | OpenRouter com chave própria do Bedrock | US$ 33,40 |
 
-O custo real aparece na página da execução (`docs/execucoes/`), lido do
+O custo real aparece na página da execução (em `docs/runs/`, em inglês; a versão em português fica em `docs/pt-br/execucoes/`), lido do
 consumo da chave do OpenRouter antes e depois; no Bedrock direto ele é
 calculado pelos tokens e pelos preços de lista.
 
@@ -361,7 +361,7 @@ Os dois arquivos são versionados no Git: o resultado do benchmark faz parte
 do projeto.
 
 Para registrar a execução, siga o roteiro de
-[`docs/execucoes/`](execucoes/README.md). Ele inclui uma tabela de links
+[`docs/pt-br/execucoes/`](execucoes/README.md) (a versão em inglês fica em `docs/runs/`). Ele inclui uma tabela de links
 para os traces, gerada por `python scripts/trace_links.py --results <arquivo>`.
 
 ---
